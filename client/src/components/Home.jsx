@@ -1,15 +1,42 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import { IoMdCreate } from "react-icons/io";
 import { FaClipboardList } from "react-icons/fa";
 
 const Home = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    localStorage.setItem("theme", !darkMode ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+    }
+  }, []);
+
+  const homeStyle = {
+    backgroundColor: darkMode ? "#121212" : "white",
+    color: darkMode ? "white" : "black",
+    minHeight: "100vh",
+    padding: "2rem",
+  };
+
+  const cardStyle = {
+    backgroundColor: darkMode ? "#333" : "white",
+    color: darkMode ? "white" : "black",
+  };
+
   return (
-    <div className="App">
-      <Navbar />
+    <div className="App" style={homeStyle}>
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <h1 className="text-center mt-5">Welcome to SMS</h1>
       <div className="container d-flex justify-content-evenly mt-5">
-        <div className="card" style={{ width: "18rem" }}>
+        <div className="card" style={{ ...cardStyle, width: "18rem" }}>
           <img
             src="./students_09.jpg"
             className="card-img-top"
@@ -26,7 +53,7 @@ const Home = () => {
             </Link>
           </div>
         </div>
-        <div className="card" style={{ width: "18rem" }}>
+        <div className="card" style={{ ...cardStyle, width: "18rem" }}>
           <img
             src="./students_08.jpg"
             className="card-img-top"
