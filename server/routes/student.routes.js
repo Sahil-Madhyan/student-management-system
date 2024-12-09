@@ -1,8 +1,17 @@
 let mongoose = require("mongoose"),
     express = require("express"),
     router = express.Router();
+    RateLimit = require("express-rate-limit");
 // Student Model
 let studentSchema = require("../models/Student");
+// set up rate limiter: maximum of 100 requests per 15 minutes
+const limiter = RateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // max 100 requests per windowMs
+});
+
+// apply rate limiter to all requests
+router.use(limiter);
 // CREATE Student
 router.route("/create-student").post(async (req, res, next) => {
     await studentSchema
